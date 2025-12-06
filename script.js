@@ -91,7 +91,7 @@ const restaurantData = [
         lng: 127.058357,
         comment: "집밥은 행복한 한끼", 
         photo_url: "https://i.postimg.cc/QMqH3zFg/haengboghanhankki.jpg",
-        link: "https://naver.me/GrmrN8PB",
+        link: "https://naver.me/xFL111kz",
         AI_Rank: 80
     }, 
     // ***** 9번 식당: 샤로스톤 *****
