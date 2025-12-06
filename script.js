@@ -90,7 +90,7 @@ const restaurantData = [
         lat: 37.595614, 
         lng: 127.058357,
         comment: "집밥은 행복한 한끼", 
-        photo_url: "https://i.postimg.cc/j2D5ydZf/syaloseuton.jpg",
+        photo_url: "https://i.postimg.cc/QMqH3zFg/haengboghanhankki.jpg",
         link: "https://naver.me/GrmrN8PB",
         AI_Rank: 80
     }, 
