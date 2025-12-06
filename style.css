@@ -1,4 +1,6 @@
-/* style.css 파일 */
+/* style.css 파일 - 정보창 가독성 개선 버전 */
+
+/* 기본 레이아웃 스타일 (기존 코드 유지) */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -18,4 +20,73 @@ body {
 #map {
     flex-grow: 1; 
     height: 100vh;
+}
+
+/* =================================================== */
+/* 정보창 스타일 (가독성 개선 부분) */
+/* =================================================== */
+
+.info-wrap {
+    /* 배경을 확실한 흰색으로 설정하고 투명도를 없앱니다. */
+    background: #ffffff; 
+    
+    /* 그림자를 더 명확하게 주어 지도 위에 떠 있는 느낌을 강조 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); 
+    
+    /* 기존 스타일 유지 */
+    border: none; /* 경계선 제거 */
+    border-radius: 12px; /* 모서리를 부드럽게 */
+    padding: 15px; 
+    width: 250px; 
+    position: relative; 
+    z-index: 100; /* 지도 요소들 위로 확실히 올라오도록 설정 */
+}
+
+.info-title {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 0;
+    border-bottom: 1px solid #eee; /* 제목 아래 구분선 추가 */
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #777;
+}
+
+.info-comment {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.info-link-btn {
+    display: block;
+    text-align: center;
+    background-color: #ff5858;
+    color: white;
+    padding: 8px;
+    margin-top: 15px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.info-link-btn:hover {
+    background-color: #e64545;
+}
+
+/* 이미지 스타일 */
+.info-body img {
+    border-radius: 4px;
+    margin-top: 5px;
 }
