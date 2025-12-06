@@ -7,11 +7,24 @@
 </head>
 <body>
     <div id="sidebar">
-        <h1>신입생을 위한 외대 밥집 찾기 서비스</h1>
-        <div id="category-filters"></div>
-        <div id="restaurant-list"></div>
-        <div id="review-form-area"></div>
+    <h1>신입생을 위한 외대 밥집 찾기 서비스</h1>
+    
+    <div id="category-filters">
+        <h2>필터링:</h2>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="전체">전체</button>
+            <button class="filter-btn" data-category="한식">한식</button>
+            <button class="filter-btn" data-category="일식">일식</button>
+            <button class="filter-btn" data-category="중식">중식</button>
+            <button class="filter-btn" data-category="양식">양식</button>
+            <button class="filter-btn" data-category="기타">기타</button>
+            <button class="filter-btn" data-category="고기 / 회식">고기 / 회식</button>
+        </div>
     </div>
+    
+    <div id="restaurant-list"></div>
+    <div id="review-form-area"></div>
+</div>
     
     <div id="map"></div>
 
