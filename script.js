@@ -2,6 +2,7 @@
 
 // =================================================================
 // 1. 데이터 정의 (Data Definition) - 파일 맨 위에 위치해야 합니다.
+// (17개 식당 데이터 확인 완료)
 // =================================================================
 
 const restaurantData = [
@@ -89,7 +90,7 @@ const restaurantData = [
         lat: 37.595614, 
         lng: 127.058357,
         comment: "집밥은 행복한 한끼", 
-        photo_url: "https://i.postimg.cc/j2D5ydZf/syaloseuton.jpg", // 임시 이미지 사용
+        photo_url: "https://i.postimg.cc/j2D5ydZf/syaloseuton.jpg",
         link: "https://naver.me/GrmrN8PB",
         AI_Rank: 80
     }, 
@@ -191,70 +192,61 @@ const restaurantData = [
         photo_url: "https://i.postimg.cc/j5w27S8B/tong-ilbudaejjigae.jpg", 
         link: "https://naver.me/F5D1Iz0k",
         AI_Rank: 80
-    }
-    // 여기에 18번째 식당 데이터가 들어간 후 쉼표가 없어야 합니다.
+    } // 데이터 끝. 마지막에 쉼표(,) 없음.
 ];
 
 // =================================================================
 // 2. 지도 초기화 (Map Initialization)
 // =================================================================
 
-// 1. 지도를 담을 HTML 요소
 var mapContainer = document.getElementById('map'); 
 var mapOption = {
-    // 외대 중심 좌표 (임시 좌표)
     center: new kakao.maps.LatLng(37.5957, 127.0592), 
     level: 3 
 };
 
-// 2. 지도를 생성합니다.
 var map = new kakao.maps.Map(mapContainer, mapOption); 
 
 // =================================================================
 // 3. 마커 생성 및 필터링 로직 (Marker & Filter Logic)
 // =================================================================
 
-// 마커 객체와 카테고리를 담아둘 배열을 생성합니다.
+// 마커 객체와 카테고리를 담아둘 배열을 생성합니다. (필터링에 사용)
 const markers = []; 
 
-// 인포윈도우 객체 생성 (커스텀 오버레이)
+// 인포윈도우 객체 생성
 const infowindow = new kakao.maps.CustomOverlay({
     map: map,
     yAnchor: 1.5
 });
-infowindow.setMap(null); // 초기에는 정보창을 숨깁니다.
+infowindow.setMap(null);
 
 
 restaurantData.forEach(function(place) {
-    // 3.1. 마커 위치 설정
+    // 마커 위치 설정
     var marker = new kakao.maps.Marker({
         map: map,
         position: new kakao.maps.LatLng(place.lat, place.lng),
         title: place.name
     });
 
-    // 3.2. 마커와 카테고리를 markers 배열에 저장합니다.
+    // 마커와 카테고리를 markers 배열에 저장합니다.
     markers.push({marker: marker, category: place.category}); 
     
-    // 3.3. 마커에 클릭 이벤트 연결
+    // 마커에 클릭 이벤트 연결
     kakao.maps.event.addListener(marker, 'click', function() {
-        // 3.4. 정보창 내용 구성 (HTML 템플릿)
+        // 정보창 내용 구성 (HTML 템플릿)
         var content = 
             '<div class="info-wrap">' +
-                // 닫기 버튼: 클릭 시 정보창을 숨김 (인라인 JS)
                 '<div class="close-btn" onclick="infowindow.setMap(null)">❌</div>' + 
                 '<h4 class="info-title">' + place.name + '</h4>' +
-                // AI 코멘트
                 '<p class="info-comment">AI 코멘트: ' + place.comment + '</p>' +
                 '<div class="info-body">' +
-                    // 사진
                     '<img src="' + place.photo_url + '" alt="' + place.name + '" style="width:100%; height:100px; object-fit: cover;">' + 
-                    // 외부 링크 버튼
                     '<a href="' + place.link + '" target="_blank" class="info-link-btn">지도에서 자세히 보기</a>' +
                 '</div>' +
             '</div>';
 
-        // 3.5. 정보창 업데이트 및 표시
         infowindow.setContent(content);
         infowindow.setPosition(marker.getPosition());
         infowindow.setMap(map);
@@ -262,17 +254,16 @@ restaurantData.forEach(function(place) {
 });
 
 
-// 4. ***** 카테고리 필터링 함수 (핵심 AI 로직) *****
+// 4. ***** 카테고리 필터링 함수 *****
 function filterMarkers(category) {
     markers.forEach(item => {
         const marker = item.marker;
         const placeCategory = item.category;
 
-        // "전체"를 선택하거나, 식당의 카테고리가 일치하면 마커를 표시
         if (category === "전체" || placeCategory.includes(category)) {
             marker.setMap(map);
         } else {
-            marker.setMap(null); // 마커를 숨김
+            marker.setMap(null); 
         }
     });
 }
