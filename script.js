@@ -1,3 +1,39 @@
+/* script.js 파일 - 기존 지도 생성 코드 아래에 추가 */
+
+// 마커 객체를 담아둘 배열을 생성합니다.
+const markers = [];
+
+// 기존의 마커 생성 및 클릭 이벤트 연결 코드를 수정합니다.
+restaurantData.forEach(function(place) {
+    // 3.1. 마커 위치 설정
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: new kakao.maps.LatLng(place.lat, place.lng),
+        title: place.name
+    });
+
+    // 새로 추가: markers 배열에 마커와 카테고리를 저장합니다.
+    markers.push({marker: marker, category: place.category}); 
+    
+    // ... (기존의 클릭 이벤트 연결 코드는 그대로 유지합니다.)
+    // ...
+});
+
+
+// 4. ***** 카테고리 필터링 함수 (핵심 로직) *****
+function filterMarkers(category) {
+    markers.forEach(item => {
+        const marker = item.marker;
+        const placeCategory = item.category;
+
+        // "전체"를 선택하거나, 식당의 카테고리가 선택된 카테고리를 포함하면 보여줍니다.
+        if (category === "전체" || placeCategory.includes(category)) {
+            marker.setMap(map); // 마커를 지도에 표시
+        } else {
+            marker.setMap(null); // 마커를 지도에서 숨김
+        }
+    });
+}
 /* script.js 파일 - 최상단에 아래 코드를 붙여넣습니다. */
 
 const restaurantData = [
@@ -206,3 +242,22 @@ var mapOption = {
 
 // 2. 지도를 생성합니다.
 var map = new kakao.maps.Map(mapContainer, mapOption);
+
+/* script.js 파일의 가장 마지막에 추가합니다. */
+
+// 5. ***** HTML 버튼에 이벤트 리스너 연결 *****
+const filterButtons = document.querySelectorAll('.filter-btn');
+
+filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // 1. 모든 버튼의 'active' 클래스 제거
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // 2. 클릭한 버튼에 'active' 클래스 추가
+        this.classList.add('active');
+
+        // 3. 필터링 함수 실행
+        const category = this.getAttribute('data-category'); // 버튼의 data-category 값을 가져옴
+        filterMarkers(category);
+    });
+});
