@@ -1,72 +1,36 @@
-/* script.js 파일 - 기존 지도 생성 코드 아래에 추가 */
+/* script.js 파일 - 최종 통합본 */
 
-// 마커 객체를 담아둘 배열을 생성합니다.
-const markers = [];
-
-// 기존의 마커 생성 및 클릭 이벤트 연결 코드를 수정합니다.
-restaurantData.forEach(function(place) {
-    // 3.1. 마커 위치 설정
-    var marker = new kakao.maps.Marker({
-        map: map,
-        position: new kakao.maps.LatLng(place.lat, place.lng),
-        title: place.name
-    });
-
-    // 새로 추가: markers 배열에 마커와 카테고리를 저장합니다.
-    markers.push({marker: marker, category: place.category}); 
-    
-    // ... (기존의 클릭 이벤트 연결 코드는 그대로 유지합니다.)
-    // ...
-});
-
-
-// 4. ***** 카테고리 필터링 함수 (핵심 로직) *****
-function filterMarkers(category) {
-    markers.forEach(item => {
-        const marker = item.marker;
-        const placeCategory = item.category;
-
-        // "전체"를 선택하거나, 식당의 카테고리가 선택된 카테고리를 포함하면 보여줍니다.
-        if (category === "전체" || placeCategory.includes(category)) {
-            marker.setMap(map); // 마커를 지도에 표시
-        } else {
-            marker.setMap(null); // 마커를 지도에서 숨김
-        }
-    });
-}
-/* script.js 파일 - 최상단에 아래 코드를 붙여넣습니다. */
+// =================================================================
+// 1. 데이터 정의 (Data Definition) - 파일 맨 위에 위치해야 합니다.
+// =================================================================
 
 const restaurantData = [
-    // ***** 1번 식당: 고부삼 예시 *****
+    // ***** 1번 식당: 고부삼 *****
     { 
         name: "고부삼", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595518, 
         lng: 127.060981,
-        // 텍스트는 반드시 따옴표 ""로 묶습니다.
         comment: "삼겹정식이 가성비가 좋다!", 
         photo_url: "https://i.postimg.cc/s2hs95gq/gobusam.jpg", 
         link: "https://naver.me/GlJ6zr0V",
         AI_Rank: 80
-    }, // <-- 중요: 객체가 끝나면 반드시 쉼표(,)를 찍고 다음 객체로 넘어갑니다.
-    
-    // ***** 2번 식당: 영화장 예시 *****
+    }, 
+    // ***** 2번 식당: 영화장 *****
     {
         name: "영화장", 
         category: "중식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.596543, 
         lng: 127.060931,
         comment: "외대 중국집 1티어", 
         photo_url: "https://i.postimg.cc/Dw9LgkhV/yeonghwajang.jpg", 
         link: "https://naver.me/GrmrN8PB",
         AI_Rank: 80
-    }, 
+    },
+    // ***** 3번 식당: 할머니 보쌈 *****
     {
         name: "할머니 보쌈", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.598393, 
         lng: 127.056138,
         comment: "보쌈하면 할보", 
@@ -74,10 +38,10 @@ const restaurantData = [
         link: "https://naver.me/Fr7b8eWO",
         AI_Rank: 80
     }, 
+    // ***** 4번 식당: 송원 *****
     {
         name: "송원", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595664, 
         lng: 127.060517,
         comment: "제육, 된찌하면 송원", 
@@ -85,10 +49,10 @@ const restaurantData = [
         link: "https://naver.me/GCvqw7R4",
         AI_Rank: 80
     }, 
+    // ***** 5번 식당: 마루기 *****
     {
         name: "마루기", 
         category: "일식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595449, 
         lng: 127.060486,
         comment: "라멘, 가츠동 wow", 
@@ -96,10 +60,10 @@ const restaurantData = [
         link: "https://naver.me/Fjbn1pc2",
         AI_Rank: 80
     }, 
+    // ***** 6번 식당: 돈두렁 *****
     {
         name: "돈두렁", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595787, 
         lng: 127.060439,
         comment: "삼겹살하면 돈두렁", 
@@ -107,10 +71,10 @@ const restaurantData = [
         link: "https://naver.me/5R4OmqQu",
         AI_Rank: 80
     }, 
+    // ***** 7번 식당: 알촌 *****
     {
         name: "알촌", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.598642, 
         lng: 127.057158,
         comment: "가격대비 양 굿", 
@@ -118,21 +82,21 @@ const restaurantData = [
         link: "https://naver.me/FO97e2ou",
         AI_Rank: 80
     }, 
+    // ***** 8번 식당: 행복한한끼 *****
     {
         name: "행복한한끼", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595614, 
         lng: 127.058357,
         comment: "집밥은 행복한 한끼", 
-        photo_url: "YOUR_PHOTO_URL_HERE", 
+        photo_url: "https://i.postimg.cc/j2D5ydZf/syaloseuton.jpg", // 임시 이미지 사용
         link: "https://naver.me/GrmrN8PB",
         AI_Rank: 80
     }, 
+    // ***** 9번 식당: 샤로스톤 *****
     {
         name: "샤로스톤", 
         category: "양식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595414, 
         lng: 127.061235,
         comment: "스테이크, 규카츠는 샤로스톤", 
@@ -140,10 +104,10 @@ const restaurantData = [
         link: "https://naver.me/FN7RvLAK",
         AI_Rank: 80
     }, 
+    // ***** 10번 식당: 호헌장담 *****
     {
         name: "호헌장담", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.598524, 
         lng: 127.057172,
         comment: "데이트와 모임에 완벽한 공간", 
@@ -151,10 +115,10 @@ const restaurantData = [
         link: "https://naver.me/xeAfyzOZ",
         AI_Rank: 80
     }, 
+    // ***** 11번 식당: 치보 *****
     {
         name: "치보", 
         category: "양식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.599097, 
         lng: 127.057618,
         comment: "후문 파스타는 치보", 
@@ -162,10 +126,10 @@ const restaurantData = [
         link: "https://naver.me/xKEbgSmV",
         AI_Rank: 80
     }, 
+    // ***** 12번 식당: 피렌지앵 *****
     {
         name: "피렌지앵", 
         category: "양식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595669, 
         lng: 127.062892,
         comment: "정문 파스타는 피렌지앵", 
@@ -173,10 +137,10 @@ const restaurantData = [
         link: "https://naver.me/xMncBHWw",
         AI_Rank: 80
     }, 
+    // ***** 13번 식당: 돼랑이우랑이 *****
     {
         name: "돼랑이우랑이", 
         category: "일식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595101, 
         lng: 127.063509,
         comment: "다양한 모둠카츠의 풍미", 
@@ -184,10 +148,10 @@ const restaurantData = [
         link: "https://naver.me/FfeLMxrZ",
         AI_Rank: 80
     }, 
+    // ***** 14번 식당: 밀플랜비 *****
     {
         name: "밀플랜비", 
         category: "기타",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.599110, 
         lng: 127.057801,
         comment: "부리또는 밀플랜비", 
@@ -195,10 +159,10 @@ const restaurantData = [
         link: "https://naver.me/FeXYKN2V",
         AI_Rank: 80
     }, 
+    // ***** 15번 식당: 아지매식당 *****
     {
         name: "아지매식당", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595655, 
         lng: 127.060697,
         comment: "치즈제육 wow", 
@@ -206,10 +170,10 @@ const restaurantData = [
         link: "https://naver.me/5WOjN7Gf",
         AI_Rank: 80
     }, 
+    // ***** 16번 식당: 카빙당 *****
     {
         name: "카빙당", 
         category: "일식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.598210, 
         lng: 127.056020,
         comment: "일식은 카빙당", 
@@ -217,10 +181,10 @@ const restaurantData = [
         link: "https://naver.me/5A3N4sez",
         AI_Rank: 80
     }, 
+    // ***** 17번 식당: 통일 부대찌개 *****
     {
         name: "통일 부대찌개", 
         category: "한식",
-        // 좌표는 숫자이므로 따옴표를 사용하지 않습니다.
         lat: 37.595725, 
         lng: 127.060321,
         comment: "부대찌개 goat", 
@@ -228,10 +192,13 @@ const restaurantData = [
         link: "https://naver.me/F5D1Iz0k",
         AI_Rank: 80
     }
-    // ... 나머지 16개 식당 정보를 이 형식에 맞춰 이어서 추가합니다.
-    // 마지막 식당 데이터 뒤에는 쉼표(,)를 찍지 않습니다.
+    // 여기에 18번째 식당 데이터가 들어간 후 쉼표가 없어야 합니다.
 ];
-/* script.js 파일 */
+
+// =================================================================
+// 2. 지도 초기화 (Map Initialization)
+// =================================================================
+
 // 1. 지도를 담을 HTML 요소
 var mapContainer = document.getElementById('map'); 
 var mapOption = {
@@ -241,23 +208,102 @@ var mapOption = {
 };
 
 // 2. 지도를 생성합니다.
-var map = new kakao.maps.Map(mapContainer, mapOption);
+var map = new kakao.maps.Map(mapContainer, mapOption); 
 
-/* script.js 파일의 가장 마지막에 추가합니다. */
+// =================================================================
+// 3. 마커 생성 및 필터링 로직 (Marker & Filter Logic)
+// =================================================================
 
-// 5. ***** HTML 버튼에 이벤트 리스너 연결 *****
+// 마커 객체와 카테고리를 담아둘 배열을 생성합니다.
+const markers = []; 
+
+// 인포윈도우 객체 생성 (커스텀 오버레이)
+const infowindow = new kakao.maps.CustomOverlay({
+    map: map,
+    yAnchor: 1.5
+});
+infowindow.setMap(null); // 초기에는 정보창을 숨깁니다.
+
+
+restaurantData.forEach(function(place) {
+    // 3.1. 마커 위치 설정
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: new kakao.maps.LatLng(place.lat, place.lng),
+        title: place.name
+    });
+
+    // 3.2. 마커와 카테고리를 markers 배열에 저장합니다.
+    markers.push({marker: marker, category: place.category}); 
+    
+    // 3.3. 마커에 클릭 이벤트 연결
+    kakao.maps.event.addListener(marker, 'click', function() {
+        // 3.4. 정보창 내용 구성 (HTML 템플릿)
+        var content = 
+            '<div class="info-wrap">' +
+                // 닫기 버튼: 클릭 시 정보창을 숨김 (인라인 JS)
+                '<div class="close-btn" onclick="infowindow.setMap(null)">❌</div>' + 
+                '<h4 class="info-title">' + place.name + '</h4>' +
+                // AI 코멘트
+                '<p class="info-comment">AI 코멘트: ' + place.comment + '</p>' +
+                '<div class="info-body">' +
+                    // 사진
+                    '<img src="' + place.photo_url + '" alt="' + place.name + '" style="width:100%; height:100px; object-fit: cover;">' + 
+                    // 외부 링크 버튼
+                    '<a href="' + place.link + '" target="_blank" class="info-link-btn">지도에서 자세히 보기</a>' +
+                '</div>' +
+            '</div>';
+
+        // 3.5. 정보창 업데이트 및 표시
+        infowindow.setContent(content);
+        infowindow.setPosition(marker.getPosition());
+        infowindow.setMap(map);
+    });
+});
+
+
+// 4. ***** 카테고리 필터링 함수 (핵심 AI 로직) *****
+function filterMarkers(category) {
+    markers.forEach(item => {
+        const marker = item.marker;
+        const placeCategory = item.category;
+
+        // "전체"를 선택하거나, 식당의 카테고리가 일치하면 마커를 표시
+        if (category === "전체" || placeCategory.includes(category)) {
+            marker.setMap(map);
+        } else {
+            marker.setMap(null); // 마커를 숨김
+        }
+    });
+}
+
+
+// =================================================================
+// 5. 이벤트 핸들러 및 폼 채우기 (Event Handlers & Form Fill)
+// =================================================================
+
+// 5.1. HTML 버튼에 이벤트 리스너 연결
 const filterButtons = document.querySelectorAll('.filter-btn');
 
 filterButtons.forEach(button => {
     button.addEventListener('click', function() {
-        // 1. 모든 버튼의 'active' 클래스 제거
+        // 버튼 스타일링
         filterButtons.forEach(btn => btn.classList.remove('active'));
-        
-        // 2. 클릭한 버튼에 'active' 클래스 추가
         this.classList.add('active');
 
-        // 3. 필터링 함수 실행
-        const category = this.getAttribute('data-category'); // 버튼의 data-category 값을 가져옴
+        // 필터링 함수 실행
+        const category = this.getAttribute('data-category');
         filterMarkers(category);
     });
+});
+
+
+// 5.2. 리뷰 폼 식당 목록 채우기
+const selectElement = document.getElementById('review-restaurant-name');
+
+restaurantData.forEach(place => {
+    const option = document.createElement('option');
+    option.value = place.name;
+    option.textContent = place.name;
+    selectElement.appendChild(option);
 });
